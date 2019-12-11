@@ -5,7 +5,7 @@ import random
 ################ Connect SQLite Database ################
 
 db_connection = None # Define the connection parameter
-db_name = "project.db" # Specify the full path of Database file
+db_name = "/Users/jasonrocha/Documents/CSE111/Project/project.db" # Specify the full path of Database file
 
 try:
     db_connection = sqlite3.connect(db_name)
@@ -57,40 +57,48 @@ def query2():
     brewOrBlend=raw_input("What do you feel like drinking tonight? Enter beer or wine: ")
     
     if brewOrBlend == "beer" or brewOrBlend == "Beer":
-        style=raw_input("What style of beer would you like? Enter Ale, Wheat Ale, Pilsner, Stout, or Lager seperated by a comma: \n")
-        print("I want a " + style)
+        print("\n")
+        style=raw_input("What style of beer would you like? \nEnter from the following: \nAle \nWheat Ale \nPilsner \nStout \nLager \n> ")
+        print("\nBeers: ")
         db_cursor.execute("SELECT b_name FROM beer, TypesOfAlcohol WHERE a_beertypename = \"" + style + "\" AND a_typekey = b_typekey GROUP BY b_name;")
-        db_connection.commit()
-        result = db_cursor.fetchall()
-        db_connection.commit()
-        for row in result:
-            print(row)
         
-        drinkToFind = raw_input("If you would like to find locations where you can find a drink, please type in the drink name \n\n ")
-        db_cursor.execute("SELECT l_name, l_address, l_phonenumber FROM location, foundat WHERE l_locationkey = f_locationkey AND f_beername LIKE'" + drinkToFind + "%';")
         db_connection.commit()
         result = db_cursor.fetchall()
-        print("############# Locations ###############")
+        db_connection.commit()
         for row in result:
-            print(row)
+            print(row[0])
+    
+        print("\n")
+        drinkToFind = raw_input("If you would like to find locations where you can find a drink, please type in the drink name: \n> ")
+        db_cursor.execute("SELECT l_name, l_address, l_phonenumber FROM location, foundat WHERE l_locationkey = f_locationkey AND f_beername LIKE'" + drinkToFind + "%';")
+        print("\n")
+        db_connection.commit()
+        result = db_cursor.fetchall()
+        print("Location:")
+        for row in result:
+            print row[0], row[1], row[2]
 
     elif brewOrBlend == "wine" or breworBlend == "Wine":
-        style = raw_input("What style of wine would you like? Enter Pinot Noir, Syrah, Cabernet Sauvigon, Red Blend, Chardonnay, Zinfandel, or Rose seperated by a comma \n\n")
-        print("I want a " + style)
+        print("\n")
+        style = raw_input("What style of wine would you like? \nEnter from the following: \nPinot Noir \nSyrah \nCabernet Sauvigon \nRed Blend \nChardonnay \nZinfandel \nRose \n> ")
+        print("\nWines: ")
         db_cursor.execute("Select w_name FROM wine, TypesOfAlcohol WHERE a_winetypename = \"" + style + "\" AND a_typekey = w_typekey GROUP BY w_name;")
         
         db_connection.commit()
         result = db_cursor.fetchall()
         
         for row in result:
-            print(row)
-        drinkToFind = raw_input("If you would like to find locations where you can find a drink, please type in the drink name \n\n ")
+            print(row[0])
+        
+        print("\n")
+        drinkToFind = raw_input("If you would like to find locations where you can find a drink, please type in the drink name \n> ")
         db_cursor.execute("SELECT l_name, l_address, l_phonenumber FROM location, foundat WHERE l_locationkey = f_locationkey AND f_winename LIKE '" + drinkToFind + "%';")
+        print("\n")
         db_connection.commit()
         result = db_cursor.fetchall()
-        print("############# Locations ###############")
+        print("Location:")
         for row in result:
-            print(row)
+            print row[0], row[1], row[2]
         
     
     
@@ -111,4 +119,3 @@ query2()
 
 db_cursor.close()
 db_connection.close()
-print("Closed")
