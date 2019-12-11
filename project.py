@@ -19,6 +19,14 @@ if db_connection:
 
 ################ Code ################
 
+intoBrewery = False
+
+intoWinery = False
+
+intoBeer = False
+
+intoWine = False
+
 select_query = "SELECT * FROM region"
 
 input_table = "CREATE TABLE warehouse( \
@@ -44,14 +52,38 @@ db_cursor = db_connection.cursor()
 
 
 def input_data():
-    w_name=raw_input( "Enter Name: ")
-    w_supplierkey=int(raw_input( "Enter Supplier: "))
-    w_capacity=int(raw_input( "Enter Capacity: "))
-    w_address=raw_input( "Enter Address: ")
-    w_nationkey=int(raw_input( "Enter Nation: "))
-    warehousekey = random.randint(1,100)
-    db_cursor.execute("INSERT INTO warehouse(w_warehousekey, w_name, w_supplierkey, w_capacity, w_address, w_nationkey) VALUES(?,?,?,?,?,?)",(warehousekey, w_name, w_supplierkey, w_capacity, w_address, w_nationkey))
-    db_connection.commit()
+    if intoBrewery == True:
+        br_name=raw_input("Enter Brewery Name: ")
+        br_description=raw_input("Enter a Description: ")
+        br_locationkey = random.randint(1,100)
+        db_cursor.execute("INSERT INTO brewery(br_name, br_locationkey, br_description) VALUES(?,?,?)",(br_name, br_locationkey, br_description))
+        db_connection.commit()
+
+    elif intoWinery == True:
+        wi_name=raw_input("Enter Winery Name: ")
+        wi_description=raw_input("Enter a Description: ")
+        wi_locationkey = random.randint(1,100)
+        db_cursor.execute("INSERT INTO Winery(wi_name, wi_locationkey, wi_description) VALUES(?,?,?,?,?,?)",(wi_name, wi_locationkey, wi_description))
+        db_connection.commit()
+
+    elif intoWine == True:
+        w_name=raw_input("Enter wine Name: ")
+        w_ABV=float(raw_input("Enter the ABV: "))
+        w_typekey=int(raw_input("Enter a key: "))
+        w_year=int(raw_input("Enter the year it was made: "))
+        w_description=raw_input("Enter a description: ")
+        db_cursor.execute("INSERT INTO wine(w_name, w_ABV, w_typekey, w_year, w_description) VALUES(?,?,?,?,?)",(w_name, w_ABV, w_typekey, w_year, w_description))
+        db_connection.commit()
+
+    elif intoBeer == True:
+        b_name=raw_input("Enter beer Name: ")
+        b_ABV=float(raw_input("Enter the ABV: "))
+        b_typekey=int(raw_input("Enter a key: "))
+        b_IBU=float(raw_input("Enter the IBU: "))
+        b_description=raw_input("Enter a description: ")
+        db_cursor.execute("INSERT INTO beer(b_name, b_ABV, b_typekey, b_IBU, b_description) VALUES(?,?,?,?,?)",(b_name, b_ABV, b_typekey, b_IBU, b_description))
+        db_connection.commit()
+
 
 def query2():
     brewOrBlend=raw_input("What do you feel like drinking tonight? Enter beer or wine: ")
@@ -100,12 +132,27 @@ def query2():
         for row in result:
             print row[0], row[1], row[2]
         
-    
+addOrSearch=raw_input("Choose from the following commands: \nAdd \nSearch \n>")
+if addOrSearch == "Add" or addOrSearch == "add":
+    addWhere=raw_input("\nWhich of the following tables would you like to insert to? \nBrewery \nWinery \nWine \nBeer\n>")
+    if addWhere == "Winery" or addWhere == "winery":
+        intoWinery = True
+    elif addWhere == "Brewery" or addWhere == "brewery":
+        intoBrewery = True
+    elif addWhere == "Wine" or addWhere == "wine":
+        intoWine = True
+    elif addWhere == "Beer" or addWhere == "beer":
+        intoBeer = True
+    input_data()
+
+elif addOrSearch == "Search" or addOrSearch == "search":
+    query2()
+
     
     #db_cursor.execute("SELECT w_name FROM warehouse WHERE w_capacity <" + brewOrBlend + ";")
 #db_connection.commit()
 
-query2()
+#query2()
 #input_data()
 #db_cursor.execute(input1)
 
