@@ -61,21 +61,34 @@ def query2():
         print("I want a " + style)
         db_cursor.execute("SELECT b_name FROM beer, TypesOfAlcohol WHERE a_beertypename = \"" + style + "\" AND a_typekey = b_typekey GROUP BY b_name;")
         db_connection.commit()
+        result = db_cursor.fetchall()
+        db_connection.commit()
+        for row in result:
+            print(row)
+        
+        drinkToFind = raw_input("If you would like to find locations where you can find a drink, please type in the drink name \n\n ")
+        db_cursor.execute("SELECT l_name, l_address, l_phonenumber FROM location, foundat WHERE l_locationkey = f_locationkey AND f_beername LIKE'" + drinkToFind + "%';")
+        db_connection.commit()
+        result = db_cursor.fetchall()
+        print("############# Locations ###############")
+        for row in result:
+            print(row)
 
     elif brewOrBlend == "wine" or breworBlend == "Wine":
         style = raw_input("What style of wine would you like? Enter Pinot Noir, Syrah, Cabernet Sauvigon, Red Blend, Chardonnay, Zinfandel, or Rose seperated by a comma \n\n")
         print("I want a " + style)
         db_cursor.execute("Select w_name FROM wine, TypesOfAlcohol WHERE a_winetypename = \"" + style + "\" AND a_typekey = w_typekey GROUP BY w_name;")
+        
         db_connection.commit()
         result = db_cursor.fetchall()
-        print("############# Result ###############")
+        
         for row in result:
             print(row)
         drinkToFind = raw_input("If you would like to find locations where you can find a drink, please type in the drink name \n\n ")
         db_cursor.execute("SELECT l_name, l_address, l_phonenumber FROM location, foundat WHERE l_locationkey = f_locationkey AND f_winename LIKE '" + drinkToFind + "%';")
         db_connection.commit()
         result = db_cursor.fetchall()
-        print("############# Result ###############")
+        print("############# Locations ###############")
         for row in result:
             print(row)
         
