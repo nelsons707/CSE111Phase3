@@ -27,26 +27,6 @@ intoBeer = False
 
 intoWine = False
 
-select_query = "SELECT * FROM region"
-
-input_table = "CREATE TABLE warehouse( \
-w_warehousekey decimal(3,0) not null,\
-w_name char(25) not null,\
-w_supplierkey decimal(2,0) not null,\
-w_capacity decimal(6,2) not null,\
-w_address varchar(40) not null,\
-w_nationkey decimal(2,0) not null)"
-
-#class data:
-#  def __init__(self):
-#      self.name=raw_input( "Enter Name: ")
-#      self.supplier=raw_input( "Enter Supplier: ")
-#      self.capacity=raw_input( "Enter Capacity: ")
-#      self.address=raw_input( "Enter Address: ")
-#      self.nation=raw_input( "Enter Nation: ")
-#a=data()
-#asking = input("Insert into warehouse (w_name,w_supplierkey,w_capacity,w_adress,w_nationkey) Values (?,?,?,?,?)",(a.name,a.supplier,a.capacity,a.address,a.nation))
-#params = (name, supplier, capacity, address, nation)
 
 db_cursor = db_connection.cursor()
 
@@ -58,6 +38,11 @@ def input_data():
         br_locationkey = random.randint(1,100)
         db_cursor.execute("INSERT INTO brewery(br_name, br_locationkey, br_description) VALUES(?,?,?)",(br_name, br_locationkey, br_description))
         db_connection.commit()
+        restartProgram = raw_input("\nPress r to restart || Press e to exit \n> ")
+        if restartProgram == "r":
+            Menu()
+        elif restartProgram == "e":
+            quit()
 
     elif intoWinery == True:
         wi_name=raw_input("Enter Winery Name: ")
@@ -65,6 +50,11 @@ def input_data():
         wi_locationkey = random.randint(1,100)
         db_cursor.execute("INSERT INTO Winery(wi_name, wi_locationkey, wi_description) VALUES(?,?,?,?,?,?)",(wi_name, wi_locationkey, wi_description))
         db_connection.commit()
+        restartProgram = raw_input("\nPress r to restart || Press e to exit \n> ")
+        if restartProgram == "r":
+            Menu()
+        elif restartProgram == "e":
+            quit()
 
     elif intoWine == True:
         w_name=raw_input("Enter wine Name: ")
@@ -74,6 +64,11 @@ def input_data():
         w_description=raw_input("Enter a description: ")
         db_cursor.execute("INSERT INTO wine(w_name, w_ABV, w_typekey, w_year, w_description) VALUES(?,?,?,?,?)",(w_name, w_ABV, w_typekey, w_year, w_description))
         db_connection.commit()
+        restartProgram = raw_input("\nPress r to restart || Press e to exit \n> ")
+        if restartProgram == "r":
+            Menu()
+        elif restartProgram == "e":
+            quit()
 
     elif intoBeer == True:
         b_name=raw_input("Enter beer Name: ")
@@ -83,6 +78,11 @@ def input_data():
         b_description=raw_input("Enter a description: ")
         db_cursor.execute("INSERT INTO beer(b_name, b_ABV, b_typekey, b_IBU, b_description) VALUES(?,?,?,?,?)",(b_name, b_ABV, b_typekey, b_IBU, b_description))
         db_connection.commit()
+        restartProgram = raw_input("\nPress r to restart || Press e to exit \n> ")
+        if restartProgram == "r":
+            Menu()
+        elif restartProgram == "e":
+            quit()
 
 
 def query2():
@@ -109,6 +109,11 @@ def query2():
         print("Location:")
         for row in result:
             print row[0], row[1], row[2]
+        restartProgram = raw_input("\nPress r to restart || Press e to exit \n> ")
+        if restartProgram == "r":
+            Menu()
+        elif restartProgram == "e":
+            quit()
 
     elif brewOrBlend == "wine" or breworBlend == "Wine":
         print("\n")
@@ -131,28 +136,37 @@ def query2():
         print("Location:")
         for row in result:
             print row[0], row[1], row[2]
-        
-addOrSearch=raw_input("Choose from the following commands: \nAdd \nSearch \n>")
-if addOrSearch == "Add" or addOrSearch == "add":
-    addWhere=raw_input("\nWhich of the following tables would you like to insert to? \nBrewery \nWinery \nWine \nBeer\n>")
-    if addWhere == "Winery" or addWhere == "winery":
-        intoWinery = True
-    elif addWhere == "Brewery" or addWhere == "brewery":
-        intoBrewery = True
-    elif addWhere == "Wine" or addWhere == "wine":
-        intoWine = True
-    elif addWhere == "Beer" or addWhere == "beer":
-        intoBeer = True
-    input_data()
+        restartProgram = raw_input("\nPress r to restart || Press e to exit \n> ")
+        if restartProgram == "r":
+            Menu()
+        elif restartProgram == "e":
+            quit()
 
-elif addOrSearch == "Search" or addOrSearch == "search":
-    query2()
 
+def Menu():
+    intoBrewery = False
+    intoBeer = False
+    intoWinery = False
+    intoWine = False
     
-    #db_cursor.execute("SELECT w_name FROM warehouse WHERE w_capacity <" + brewOrBlend + ";")
-#db_connection.commit()
+    addOrSearch=raw_input("Choose from the following commands: \nAdd \nSearch \n>")
+    if addOrSearch == "Add" or addOrSearch == "add":
+        addWhere=raw_input("\nWhich of the following tables would you like to insert to? \nBrewery \nWinery \nWine \nBeer\n>")
+        if addWhere == "Winery" or addWhere == "winery":
+            intoWinery = True
+        elif addWhere == "Brewery" or addWhere == "brewery":
+            intoBrewery = True
+        elif addWhere == "Wine" or addWhere == "wine":
+                intoWine = True
+        elif addWhere == "Beer" or addWhere == "beer":
+            intoBeer = True
+        input_data()
 
-#query2()
+    elif addOrSearch == "Search" or addOrSearch == "search":
+        query2()
+
+
+Menu()
 #input_data()
 #db_cursor.execute(input1)
 
